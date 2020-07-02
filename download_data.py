@@ -38,31 +38,34 @@ def search_api(token, URL):
 country = 'es' #values: es, it, pt
 locale = 'es' #values: es, it, pt, en, ca
 language = 'es' #
-max_items = '200'
+max_items = '20000'
 operation = 'rent'
 property_type = 'homes'
 order = 'distance'
 center = '40.432765,-3.701102'
-distance = '1000'
+distance = '10000'
 sort = 'desc'
 bankOffer = 'false'
 
 df_tot = pd.DataFrame()
-limit = 10
+limit = 1000
 
 for i in range(1,limit):
-    url = ('https://api.idealista.com/3.5/'+country+'/search?operation='+operation+#"&locale="+locale+
-           '&maxItems='+max_items+
-           '&order='+order+
-           '&center='+center+
-           '&distance='+distance+
-           '&propertyType='+property_type+
-           '&sort='+sort+
-           '&numPage=%s'+
-           '&language='+language) %(i)
-    a = search_api(get_oauth_token(), url)
-    df = pd.DataFrame.from_dict(a['elementList'])
-    df_tot = pd.concat([df_tot,df])
+    try:
+        url = ('https://api.idealista.com/3.5/'+country+'/search?operation='+operation+#"&locale="+locale+
+               '&maxItems='+max_items+
+               '&order='+order+
+               '&center='+center+
+               '&distance='+distance+
+               '&propertyType='+property_type+
+               '&sort='+sort+
+               '&numPage=%s'+
+               '&language='+language) %(i)
+        a = search_api(get_oauth_token(), url)
+        df = pd.DataFrame.from_dict(a['elementList'])
+        df_tot = pd.concat([df_tot, df])
+    except:
+        pass
 
 df_tot = df_tot.reset_index()
 
