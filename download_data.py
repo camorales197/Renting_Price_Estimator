@@ -5,6 +5,7 @@ import requests as rq
 import base64
 from dotenv import load_dotenv
 import os
+import time
 
 
 def get_oauth_token():
@@ -46,6 +47,8 @@ center = '40.432765,-3.701102'
 distance = '10000'
 sort = 'desc'
 bankOffer = 'false'
+maxPrice = '1000'
+minPrice = '300'
 
 df_tot = pd.DataFrame()
 limit = 1000
@@ -60,10 +63,15 @@ for i in range(1,limit):
                '&propertyType='+property_type+
                '&sort='+sort+
                '&numPage=%s'+
-               '&language='+language) %(i)
+               '&language='+language+
+               '&maxPrice='+maxPrice+
+               '&minPrice='+minPrice
+               ) %(i)
         a = search_api(get_oauth_token(), url)
         df = pd.DataFrame.from_dict(a['elementList'])
         df_tot = pd.concat([df_tot, df])
+        time.sleep(5)
+
     except:
         pass
 
